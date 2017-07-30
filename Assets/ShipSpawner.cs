@@ -2,6 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
+public struct IslandID
+{
+    public Transform targetPoint;
+
+    public Material material;
+}
 
 public class ShipSpawner : MonoBehaviour
 {
@@ -9,20 +16,15 @@ public class ShipSpawner : MonoBehaviour
 
     public Transform[] destinationPoints;
 
-    public Transform[] islandPoints;
+    public IslandID[] islandPoints;
 
     public GameObject shipPrefab;
 
-	void Start()
+ 	void Start()
 	{
         StartCoroutine(spawnShip());
     }
 	
-	void Update()
-	{
-
-	}
-
     IEnumerator spawnShip()
     {
         yield return new WaitForSeconds(1.0f);
@@ -31,7 +33,7 @@ public class ShipSpawner : MonoBehaviour
         {
             Transform spawningPoint    = randomSpawningPoint();
             Transform destinationPoint = randomDestinationPoint();
-            Transform islandPoint      = randomIslandPoint();
+            IslandID islandPoint      = randomIslandPoint();
 
             Ship.spawn(shipPrefab, spawningPoint, destinationPoint, islandPoint);
 
@@ -41,19 +43,19 @@ public class ShipSpawner : MonoBehaviour
 
     Transform randomSpawningPoint()
     {
-        int index = Random.Range(0, spawningPoints.Length - 1);
+        int index = Random.Range(0, spawningPoints.Length);
         return spawningPoints[index];
     }
 
     Transform randomDestinationPoint()
     {
-        int index = Random.Range(0, destinationPoints.Length - 1);
+        int index = Random.Range(0, destinationPoints.Length);
         return destinationPoints[index];
     }
 
-    Transform randomIslandPoint()
+    IslandID randomIslandPoint()
     {
-        int index = Random.Range(0, islandPoints.Length - 1);
+        int index = Random.Range(0, islandPoints.Length);
         return islandPoints[index];
     }
 }

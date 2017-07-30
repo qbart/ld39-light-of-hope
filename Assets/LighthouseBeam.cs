@@ -10,7 +10,7 @@ public class LighthouseBeam : MonoBehaviour
     { 
         if (other.CompareTag("ship"))
         {
-            Ship ship = other.gameObject.GetComponent<Ship>();
+            Ship ship = other.gameObject.GetComponentInParent<Ship>();
             if (other is CapsuleCollider)
                 ship.lightIntensity = lighthouse.intensity;
         }
@@ -20,7 +20,7 @@ public class LighthouseBeam : MonoBehaviour
     {
         if (other.CompareTag("ship"))
         {
-            Ship ship = other.gameObject.GetComponent<Ship>();
+            Ship ship = other.gameObject.GetComponentInParent<Ship>();
             if (other is CapsuleCollider)
                 ship.lightIntensity = 0;
         }

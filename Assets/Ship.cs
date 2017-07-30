@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class Ship : MonoBehaviour
 {
+    public GameObject cloth;
+    
     Rigidbody rb;
-    BoxCollider frontSensor;
-    CapsuleCollider bodySensor;
 
     Vector3 destination;
     Vector3 island;
@@ -15,17 +15,23 @@ public class Ship : MonoBehaviour
     bool targetAcquired = false;
 
     float navigationSkill = 0;
+    float learningTime = 0;
 
     [HideInInspector]
     public float lightIntensity { get; set; }
 
-    public static void spawn(GameObject prefab, Transform spawningPoint, Transform destinationPoint, Transform validDestinationPoint)
+    [HideInInspector]
+    public float skill { get; set; }
+
+    public static void spawn(GameObject prefab, Transform spawningPoint, Transform destinationPoint, IslandID islandID)
     {
         Vector3 direction = destinationPoint.position - spawningPoint.position;
         direction.Normalize();
         GameObject gameObject = Instantiate(prefab, spawningPoint.position, Quaternion.FromToRotation(Vector3.forward, direction), null);
         Ship ship = gameObject.GetComponent<Ship>();
-        ship.setTarget(destinationPoint.position, validDestinationPoint.position);
+        Renderer renderer = ship.cloth.GetComponent<Renderer>();
+        renderer.material = islandID.material;
+        ship.setTarget(destinationPoint.position, islandID.targetPoint.position);
     }
 
     void setTarget(Vector3 destination, Vector3 island)
@@ -39,24 +45,36 @@ public class Ship : MonoBehaviour
 	void Start()
 	{
         rb = GetComponent<Rigidbody>();
-        frontSensor = GetComponent<BoxCollider>();
-        bodySensor = GetComponent<CapsuleCollider>();
+        learningTime = 0;
     }
-	
-	void FixedUpdate()
+
+    void Update()
+    {
+        skill = calculateEffectiveSkill();
+        learningTime += Time.deltaTime * skill * 0.05f;
+        learningTime = Mathf.Clamp01(learningTime);
+    }
+
+    void FixedUpdate()
 	{
         if (!targetAcquired)
             return;
 
-        float skill = calculateEffectiveSkill();
+        if (skill > 0)
+        {
+            Vector3 direction = island - transform.position;
+            direction.Normalize();
 
-        Vector3 direction = destination - transform.position;
-        direction.Normalize();
+            Quaternion targetRotation = Quaternion.FromToRotation(Vector3.forward, direction);
+            Quaternion applyRotation = Quaternion.Lerp(transform.rotation, targetRotation, learningTime);
+            rb.MoveRotation(applyRotation);
+        }
+        else
+        {
+            learningTime = 0;
+        }
 
-        //Quaternion rotation = Quaternion.FromToRotation(transform.position.normalized, direction);
-        //rb.MoveRotation(rotation);
         rb.MovePosition(transform.position + transform.forward * speed * Time.deltaTime);
-
     }
 
     float calculateEffectiveSkill()
