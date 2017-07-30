@@ -13,4 +13,14 @@ public class ShipBodySensor : MonoBehaviour
             Destroy(ship.gameObject);
         }
     }
+
+    void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("water"))
+        {
+            Destroy(ship.gameObject);
+        }
+    }
 }
+
+
