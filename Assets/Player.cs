@@ -18,7 +18,7 @@ public class Player : MonoBehaviour
 
     public void Update()
     {
-        if (energy > 0)
+        if (isAlive())
         {
             time += Time.deltaTime;
             int seconds = (int)time % 60;
@@ -27,9 +27,14 @@ public class Player : MonoBehaviour
         }
     }
 
+    public bool isAlive()
+    {
+        return energy > 0;
+    }
+
     public void damage()
     {
-        if (energy > 0)
+        if (isAlive())
         {
             --energy;
             sliderHealth.value = energy;

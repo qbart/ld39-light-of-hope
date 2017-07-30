@@ -6,6 +6,8 @@ public class Ship : MonoBehaviour
 {
     public GameObject cloth;
 
+    public Player player;
+
     Rigidbody rb;
 
     Vector3 targetPosition;
@@ -30,6 +32,7 @@ public class Ship : MonoBehaviour
         direction.Normalize();
         GameObject gameObject = Instantiate(prefab, spawningPoint.position, Quaternion.FromToRotation(Vector3.forward, direction), null);
         Ship ship = gameObject.GetComponent<Ship>();
+        ship.player = player;
         ShipBodySensor shipbody = gameObject.GetComponentInChildren<ShipBodySensor>();
         shipbody.player = player;
         Renderer renderer = ship.cloth.GetComponent<Renderer>();
@@ -60,7 +63,7 @@ public class Ship : MonoBehaviour
 
     void FixedUpdate()
 	{
-        if (!targetAcquired)
+        if (!targetAcquired || !player.isAlive())
             return;
 
         if (skill > 0)

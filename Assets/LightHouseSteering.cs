@@ -8,6 +8,8 @@ public class LightHouseSteering : MonoBehaviour
 
     public Light lightbeam;
 
+    Player player;
+
     // how fast we can move
     float rotationSpeed = 90;
 
@@ -23,12 +25,19 @@ public class LightHouseSteering : MonoBehaviour
 
     void Start()
     {
+        player = GetComponent<Player>();
         keyStrokingSpeed = new float[100];
         resetKeyStrokingSpeed();
 	}
 	
 	void Update()
     {
+        if (!player.isAlive())
+        {
+            lightbeam.intensity = 0;
+            return;
+        }
+
         // rotate light
         int direction = getMovementDirection();
         if (direction != 0)
