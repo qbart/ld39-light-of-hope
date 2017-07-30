@@ -5,12 +5,13 @@ using UnityEngine;
 public class Ship : MonoBehaviour
 {
     public GameObject cloth;
-    
+
     Rigidbody rb;
 
-    Vector3 destination;
-    Vector3 island;
+    Vector3 targetPosition;
 
+    [HideInInspector]
+    public int id { get; set; }
     float speed = 5;
     bool targetAcquired = false;
 
@@ -23,21 +24,23 @@ public class Ship : MonoBehaviour
     [HideInInspector]
     public float skill { get; set; }
 
-    public static void spawn(GameObject prefab, Transform spawningPoint, Transform destinationPoint, IslandID islandID)
+    public static void spawn(Player player, GameObject prefab, Transform spawningPoint, Transform destinationPoint, IslandID islandID)
     {
         Vector3 direction = destinationPoint.position - spawningPoint.position;
         direction.Normalize();
         GameObject gameObject = Instantiate(prefab, spawningPoint.position, Quaternion.FromToRotation(Vector3.forward, direction), null);
         Ship ship = gameObject.GetComponent<Ship>();
+        ShipBodySensor shipbody = gameObject.GetComponentInChildren<ShipBodySensor>();
+        shipbody.player = player;
         Renderer renderer = ship.cloth.GetComponent<Renderer>();
         renderer.material = islandID.material;
-        ship.setTarget(destinationPoint.position, islandID.targetPoint.position);
+        ship.setTarget(islandID);
     }
 
-    void setTarget(Vector3 destination, Vector3 island)
+    void setTarget(IslandID islandID)
     {
-        this.destination = destination;
-        this.island = island;
+        targetPosition = islandID.targetPoint.position;
+        id             = islandID.id;
         targetAcquired = true;
         lightIntensity = 0;
     }
@@ -62,7 +65,7 @@ public class Ship : MonoBehaviour
 
         if (skill > 0)
         {
-            Vector3 direction = island - transform.position;
+            Vector3 direction = targetPosition - transform.position;
             direction.Normalize();
 
             Quaternion targetRotation = Quaternion.FromToRotation(Vector3.forward, direction);

@@ -16,7 +16,6 @@ public class LightHouseSteering : MonoBehaviour
     float lightMaxIntentsity = 2;
     public float intensity { get; set; }
 
-
     float allowedIdleTimeForKeyStroke = 0.4f;
     float prevKeyStrokeTime;
     int expectedKey = 1;
@@ -47,7 +46,7 @@ public class LightHouseSteering : MonoBehaviour
     void rotateLightBeam(int direction)
     {
         Quaternion rotation = lightSource.transform.rotation;
-        float angle = rotationSpeed * (float) direction * Time.deltaTime;
+        float angle = rotationSpeed * direction * Time.deltaTime;
         lightSource.transform.Rotate(new Vector3(0, angle, 0));
     }
 

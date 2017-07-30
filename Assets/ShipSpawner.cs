@@ -8,10 +8,14 @@ public struct IslandID
     public Transform targetPoint;
 
     public Material material;
+
+    public int id;
 }
 
 public class ShipSpawner : MonoBehaviour
 {
+    public Player player;
+
     public Transform[] spawningPoints;
 
     public Transform[] destinationPoints;
@@ -33,9 +37,9 @@ public class ShipSpawner : MonoBehaviour
         {
             Transform spawningPoint    = randomSpawningPoint();
             Transform destinationPoint = randomDestinationPoint();
-            IslandID islandPoint      = randomIslandPoint();
+            IslandID islandPoint       = randomIslandPoint();
 
-            Ship.spawn(shipPrefab, spawningPoint, destinationPoint, islandPoint);
+            Ship.spawn(player, shipPrefab, spawningPoint, destinationPoint, islandPoint);
 
             yield return new WaitForSeconds(3.0f);
         }
