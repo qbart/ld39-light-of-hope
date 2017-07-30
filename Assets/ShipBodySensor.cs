@@ -19,6 +19,11 @@ public class ShipBodySensor : MonoBehaviour
 
             Destroy(ship.gameObject);
         }
+        else if (other.CompareTag("Player"))
+        {
+            Destroy(ship.gameObject);
+            player.damage();
+        }
     }
 
     void OnTriggerExit(Collider other)
