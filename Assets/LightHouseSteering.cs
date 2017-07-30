@@ -14,6 +14,8 @@ public class LightHouseSteering : MonoBehaviour
     // how bright light will be
     float lightMinIntensity = 0;
     float lightMaxIntentsity = 2;
+    public float intensity { get; set; }
+
 
     float allowedIdleTimeForKeyStroke = 0.4f;
     float prevKeyStrokeTime;
@@ -34,7 +36,8 @@ public class LightHouseSteering : MonoBehaviour
             rotateLightBeam(direction);
 
         // keep light intensity
-        float intensity = calculateLightIntensity();
+        intensity = calculateLightIntensity();
+        intensity = 1;
         float lightIntensity = Mathf.Lerp(lightMinIntensity, lightMaxIntentsity, intensity);
         lightbeam.intensity = lightIntensity;
 
@@ -74,7 +77,7 @@ public class LightHouseSteering : MonoBehaviour
 
         float avg = keyStrokingAverage();
         float intensity = Mathf.Clamp01(1 - avg);
-        Debug.Log(string.Format("Average: {0}, Intensity: {1}", avg, intensity));
+        //Debug.Log(string.Format("Average: {0}, Intensity: {1}", avg, intensity));
 
         return intensity;
     }
@@ -123,4 +126,5 @@ public class LightHouseSteering : MonoBehaviour
 
         keyStrokingSpeed[0] = time;
     }
+
 }
