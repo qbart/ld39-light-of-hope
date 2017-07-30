@@ -11,7 +11,7 @@ public class LightHouseSteering : MonoBehaviour
     Player player;
 
     // how fast we can move
-    float rotationSpeed = 90;
+    float rotationSpeed = 180;
 
     // how bright light will be
     float lightMinIntensity = 0;
@@ -45,7 +45,7 @@ public class LightHouseSteering : MonoBehaviour
 
         // keep light intensity
         intensity = calculateLightIntensity();
-        intensity = 1;
+        //intensity = 1;
         float lightIntensity = Mathf.Lerp(lightMinIntensity, lightMaxIntentsity, intensity);
         lightbeam.intensity = lightIntensity;
 

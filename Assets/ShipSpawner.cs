@@ -14,6 +14,9 @@ public struct IslandID
 
 public class ShipSpawner : MonoBehaviour
 {
+    const float SPAWN_FIRST_AFTER = 1.0f;
+    const float SPAWN_EVERY = 2;
+
     public Player player;
 
     public Transform[] spawningPoints;
@@ -31,7 +34,7 @@ public class ShipSpawner : MonoBehaviour
 	
     IEnumerator spawnShip()
     {
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(SPAWN_FIRST_AFTER);
 
         while (true)
         {
@@ -41,7 +44,7 @@ public class ShipSpawner : MonoBehaviour
 
             Ship.spawn(player, shipPrefab, spawningPoint, destinationPoint, islandPoint);
 
-            yield return new WaitForSeconds(3.0f);
+            yield return new WaitForSeconds(SPAWN_EVERY);
         }
     }
 

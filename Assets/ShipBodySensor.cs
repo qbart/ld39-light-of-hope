@@ -34,19 +34,19 @@ public class ShipBodySensor : MonoBehaviour
         {
             playSound(sndCrash);
 
-            destroyShip(ship.gameObject);
             player.damage();
+            destroyShip(ship.gameObject);
         }
         else if (other.CompareTag("ship"))
         {
             playSound(sndCrash);
 
-            destroyShip(ship.gameObject);
-            destroyShip(other.gameObject);
-
-            Ship otherShip = other.GetComponent<Ship>();
+            Ship otherShip = other.GetComponentInParent<Ship>();
             player.dec(ship.id);
             player.dec(otherShip.id);
+
+            destroyShip(ship.gameObject);
+            destroyShip(other.gameObject);
         }
     }
 
@@ -54,15 +54,14 @@ public class ShipBodySensor : MonoBehaviour
     {
         if (other.CompareTag("water"))
         {
-            Destroy(ship.gameObject);
             player.dec(ship.id);
+            destroyShip(ship.gameObject);
         }
     }
 
     void destroyShip(GameObject ship)
     {
-        ship.SetActive(false);
-        Destroy(ship, 2.0f);
+        Destroy(ship);
     }
 
     void playSound(AudioClip clip)
